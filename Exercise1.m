@@ -132,4 +132,58 @@ h = [h 0];
 plot(t, h)
 
 %%
+%3a
+r = 2;
+
+func = @(t,x) [1-(r^2)*((x(1)^2-(x(2)^2))/(((x(1)^2)+(x(2)^2))^2)); (-2*x(1)*x(2)*(r^2))/(((x(1)^2)+(x(2)^2))^2)];
+
+x0 = [-4 0.2];
+start = cell(1,4);
+
+Ui = cell(1,4);
+Ti = cell(1,4);
+
+
+yval = [0.2 0.6 1 1.6];
+xval = -4;
+for i = 1:4
+    start{i} = [xval yval(i)];
+end
+
+for i = 1:4
+    [t, u] = ode45(func, [0, 10], start{i});
+    Ui{i} = u;
+    Ti{i} = t;
+end
+
+plot(Ui{1}(:,1), Ui{1}(:,2))
+hold on;
+plot(Ui{2}(:,1), Ui{2}(:,2))
+hold on;
+plot(Ui{3}(:,1), Ui{3}(:,2))
+hold on;
+plot(Ui{4}(:,1), Ui{4}(:,2))
+hold on;
+legend('1','2','3', '4')
+axis equal
+    
+
+%%
+H = 2;
+v0 = 20;
+alpha = [30, 45, 60];
+k = 0.02;
+
+f = @(t,u) [u(2); -k*u(2)*sqrt((u(2)^2)*(u(4)^2)); u(4); -9.81-k*u(3)*sqrt((u(2)^2)+(u(4)^2))];
+
+u0 = [0, v0*cos(alpha(1)), H, v0*sin(alpha(1))];
+
+[t, u] = ode45(f, [0, 10], u0);
+
+
+plot3(u(:,1), u(:,3),t)
+xlabel('t');
+ylabel('Y')
+zlabel('x')
+
 
