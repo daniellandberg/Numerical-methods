@@ -16,7 +16,7 @@ for i = 1 : length(N)
     figure(1);
     plot(t,u(1,:)');
     hold on;
-    figure(1);
+    figure(1)
     xlabel('time');
     title('ex 1')
     hold on
@@ -30,7 +30,7 @@ y1 = temp(end);
 for i = 1 : length(N)-1
     temp = U{i}(1,:);
     yn = temp(end);
-    en(i) = y1 - yn;
+    en(i) = abs(y1 - yn);
 end
 
 hLista = ones(1,5);
@@ -45,7 +45,7 @@ ylabel('en')
 
 %% 
 
-%ex2
+%ex21
 r1 = 0.04;
 r2 = 10^4;
 r3 = 3*10^7;
@@ -77,39 +77,35 @@ loglog(t,u(3,:)');
 
 en = U2{5}(:,end)-U2{4}(:,end);
 
-
 %%
+%%22
 x0 = [1 0 0];
 r1 = 0.04;
 r2 = 10^4;
 r3 = 3*10^7;
-options = odeset('RelTol', 10^-6, 'AbsTol', 10^-8);
+options = odeset('RelTol', 10^-6);
 f = @(t, x)[-r1*x(1)+(r2*x(2)*x(3)); (r1*x(1))- (r2*x(2)*x(3))-(r3*(x(2)^2)); r3*(x(2)^2)];
 [t, x] = ode23(f, [0,1], x0', options);
-figure(10)
-plot(t,x(:,2));
+%figure(10)
+%plot(t,x(:,2));
 
 %867 utan
-%10-3 : 876
-%10-4 : 878
-%10-5 : 879
-%10-6 : 879
+%10-3 : 867
+%10-4 : 868
+%10-5 : 869
+%10-6 : 869
 
 h=0;
 for i = 1 : length(t)-1
-    
     h(i) = abs(t(i) - t(i+1));
 end
 
 figure(11)
 h = [h 0];
 plot(t, h)
-%tre olika hgrafer????
-
-%%
 
 
-%%
+
 
 %%
 x0 = [1 0 0];
@@ -117,6 +113,23 @@ r1 = 0.04;
 r2 = 10^4;
 r3 = 3*10^7;
 
-options = odeset('RelTol', 10^-6, 'AbsTol', 10^-8);
+options = odeset('RelTol', 10^-6);
 f = @(t, x)[-r1*x(1)+(r2*x(2)*x(3)); (r1*x(1))- (r2*x(2)*x(3))-(r3*(x(2)^2)); r3*(x(2)^2)];
 [t, x] = ode23s(f, [0,1000], x0', options);
+%867 utan
+%10-3 : 31
+%10-4 : 38
+%10-5 : 49
+%10-6 : 62
+
+h=0;
+for i = 1 : length(t)-1
+    h(i) = abs(t(i) - t(i+1));
+end
+
+figure(12)
+h = [h 0];
+plot(t, h)
+
+%%
+
