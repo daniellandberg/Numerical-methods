@@ -13,16 +13,16 @@ for i = 1 : length(N)
     [t, u] = RK(f, [1 0], 2, N(i));
     T{i} = t;
     U{i} = u;
-    figure(1);
-    plot(t,u(1,:)');
-    hold on;
-    figure(1)
-    xlabel('time');
-    title('ex 1')
-    hold on
+%     figure(1);
+%     plot(t,u(1,:)');
+%     hold on;
+%     figure(1)
+%     xlabel('time');
+%     title('ex 1')
+%     hold on
     
 end
-legend('10','20','40', '80', '160', '320')
+%legend('10','20','40', '80', '160', '320')
 %Order of accuracy
 en = zeros(1,5);
 temp = U{6}(1,:);
@@ -37,10 +37,11 @@ hLista = ones(1,5);
 for i = 1 : length(N)-1
    hLista(i) = hLista(i)/N(i); 
 end
-figure(2);
+figure(1);
 loglog(hLista,en);
-xlabel('h')
-ylabel('en')
+title('Error plot of Runge kutta method')
+xlabel('StepLength (h)')
+ylabel('Error en')
 
 
 %% 
@@ -63,17 +64,27 @@ for i = 1 : length(N)
 end
 u  = U2{5};
 t = T2{5};
+setN = 5;
 
 figure(4);
-loglog(t,u(1,:)');
-hold on;
+subplot(2,2,1);
+loglog(T2{setN},U2{setN}(1,:)');
+title('x1 when N = 1000')
+xlabel('t');
+ylabel('x1')
 
-figure(5)
-loglog(t,u(2,:)');
-hold on;
 
-figure(6)
-loglog(t,u(3,:)');
+subplot(2,2,2);
+loglog(T2{setN},U2{setN}(2,:)');
+title('x2 when N = 1000')
+xlabel('t');
+ylabel('x2')
+
+subplot(2,2,3);
+loglog(T2{setN},U2{setN}(3,:)');
+title('x3 when N = 1000')
+xlabel('t');
+ylabel('x3')
 
 en = U2{5}(:,end)-U2{4}(:,end);
 
@@ -85,7 +96,7 @@ r2 = 10^4;
 r3 = 3*10^7;
 options = odeset('RelTol', 10^-6);
 f = @(t, x)[-r1*x(1)+(r2*x(2)*x(3)); (r1*x(1))- (r2*x(2)*x(3))-(r3*(x(2)^2)); r3*(x(2)^2)];
-[t, x] = ode23(f, [0,1], x0', options);
+[t, x] = ode23s(f, [0 1], x0', options);
 %figure(10)
 %plot(t,x(:,2));
 
@@ -93,7 +104,7 @@ f = @(t, x)[-r1*x(1)+(r2*x(2)*x(3)); (r1*x(1))- (r2*x(2)*x(3))-(r3*(x(2)^2)); r3
 %10-3 : 867
 %10-4 : 868
 %10-5 : 869
-%10-6 : 869
+%10-6 : 869Here we are expecting the order of accuracy to be 3.
 
 h=0;
 for i = 1 : length(t)-1
@@ -103,6 +114,9 @@ end
 figure(11)
 h = [h 0];
 plot(t, h)
+title('h as a function of t')
+xlabel('t');
+ylabel('h')
 
 
 
@@ -151,11 +165,12 @@ for i = 1:4
 end
 
 for i = 1:4
-    [t, u] = ode45(func, [0, 10], start{i});
+    tspan = 0:.5:10;
+    [t, u] = ode45(func, [0 10], start{i});
     Ui{i} = u;
     Ti{i} = t;
 end
-
+figure(12)
 plot(Ui{1}(:,1), Ui{1}(:,2))
 hold on;
 plot(Ui{2}(:,1), Ui{2}(:,2))
@@ -163,7 +178,9 @@ hold on;
 plot(Ui{3}(:,1), Ui{3}(:,2))
 hold on;
 plot(Ui{4}(:,1), Ui{4}(:,2))
-hold on;
+title('Particle flow past a cylinder')
+xlabel('x');
+ylabel('y')
 legend('1','2','3', '4')
 axis equal
     
@@ -174,16 +191,21 @@ v0 = 20;
 alpha = [30, 45, 60];
 k = 0.02;
 
-f = @(t,u) [u(2); -k*u(2)*sqrt((u(2)^2)*(u(4)^2)); u(4); -9.81-k*u(3)*sqrt((u(2)^2)+(u(4)^2))];
+f = @(t,u) [u(2); -k*u(2)*sqrt((u(2)^2)+(u(4)^2)); u(4); -9.81-k*u(3)*sqrt((u(2)^2)+(u(4)^2))];
 
 u0 = [0, v0*cos(alpha(1)), H, v0*sin(alpha(1))];
 
 [t, u] = ode45(f, [0, 10], u0);
 
+figure(13)
+% plot3(u(:,1), u(:,3),t)
+% xlabel('t');
+% ylabel('Y')
+% zlabel('x')
 
-plot3(u(:,1), u(:,3),t)
-xlabel('t');
-ylabel('Y')
-zlabel('x')
+plot(u(:,1), u(:,3))
+%ylim([0 15])
+xlabel('x');
+ylabel('y')
 
 
